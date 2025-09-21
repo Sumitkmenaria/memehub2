@@ -1,0 +1,32 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["package.json"],
+      "url": "https://json.schemastore.org/package.json"
+    },
+    {
+      "fileMatch": ["tsconfig.json"],
+      "url": "https://json.schemastore.org/tsconfig.json"
+    },
+    {
+      "fileMatch": ["next.config.js", "next.config.ts"],
+      "url": "https://json.schemastore.org/next.json"
+    },
+    {
+      "fileMatch": [".env", ".env.*"],
+      "url": "https://json.schemastore.org/dotenv.json"
+    },
+    {
+      "fileMatch": ["tailwind.config.js", "tailwind.config.ts"],
+      "url": "https://json.schemastore.org/tailwindcss.json"
+    },
+    {
+      "fileMatch": ["eslint.config.js", "eslint.config.mjs", ".eslintrc.json"],
+      "url": "https://json.schemastore.org/eslintrc.json"
+    }
+  ],
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "prisma.showPrismaDataPlatformNotification": false
+}

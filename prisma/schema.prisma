@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and profiles
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  username    String   @unique
+  displayName String?
+  bio         String?
+  avatar      String?
+  isAnonymous Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Auth fields
+  hashedPassword String?
+  emailVerified  DateTime?
+  
+  // Relations
+  memes          Meme[]
+  votes          Vote[]
+  favorites      Favorite[]
+  comments       Comment[]
+  following      Follow[] @relation("UserFollowing")
+  followers      Follow[] @relation("UserFollowers")
+  
+  // Notifications
+  sentNotifications     Notification[] @relation("NotificationSender")
+  receivedNotifications Notification[] @relation("NotificationReceiver")
+  
+  @@map("users")
+}
+
+// Meme model - core content
+model Meme {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String
+  memeType    MemeType @default(IMAGE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Engagement metrics
+  upvotes     Int @default(0)
+  downvotes   Int @default(0)
+  views       Int @default(0)
+  shareCount  Int @default(0)
+  
+  // Relations
+  authorId    String
+  author      User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  votes       Vote[]
+  favorites   Favorite[]
+  comments    Comment[]
+  tags        MemeTag[]
+  
+  @@map("memes")
+}
+
+// Vote model for upvote/downvote system
+model Vote {
+  id     String   @id @default(cuid())
+  type   VoteType
+  userId String
+  memeId String
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meme Meme @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, memeId])
+  @@map("votes")
+}
+
+// Favorite model for saved memes
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  memeId    String
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meme Meme @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, memeId])
+  @@map("favorites")
+}
+
+// Comment model for meme comments
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  userId String
+  memeId String
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meme Meme @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  
+  @@map("comments")
+}
+
+// Follow model for user relationships
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  
+  follower  User @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+  
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
+
+// Tag model for meme categorization
+model Tag {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  memeTags MemeTag[]
+  
+  @@map("tags")
+}
+
+// Junction table for many-to-many relationship between Meme and Tag
+model MemeTag {
+  id     String @id @default(cuid())
+  memeId String
+  tagId  String
+  
+  meme Meme @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@unique([memeId, tagId])
+  @@map("meme_tags")
+}
+
+// Notification model for user interactions
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  
+  // Relations
+  senderId   String?
+  sender     User?   @relation("NotificationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User    @relation("NotificationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  
+  // Related content
+  memeId    String?
+  commentId String?
+  
+  @@map("notifications")
+}
+
+// Enums
+enum NotificationType {
+  LIKE
+  COMMENT
+  FOLLOW
+  MENTION
+  SHARE
+}
+
+enum MemeType {
+  IMAGE
+  GIF
+  VIDEO
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
