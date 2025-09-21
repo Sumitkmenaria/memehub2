@@ -1,11 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+'use client'
+
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { AppLayout } from '@/components/layout/app-layout'
 import { MemeEditor } from '@/components/ui/meme-editor'
 
-export default function EditorPage() {
+// Separate component that uses useSearchParams
+function EditorContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [templateData, setTemplateData] = useState<any>(null)
@@ -69,5 +72,25 @@ export default function EditorPage() {
         />
       </div>
     </AppLayout>
+  )
+}
+
+// Loading component for Suspense fallback
+function EditorLoading() {
+  return (
+    <AppLayout>
+      <div className="flex justify-center items-center h-96">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+      </div>
+    </AppLayout>
+  )
+}
+
+// Main page component with Suspense wrapper
+export default function EditorPage() {
+  return (
+    <Suspense fallback={<EditorLoading />}>
+      <EditorContent />
+    </Suspense>
   )
 }
