@@ -1,0 +1,135 @@
+{
+  "users": [
+    {
+      "id": "cmfs4go8m0000vuzc70wdo4sm",
+      "email": "smenaria2@gmail.com",
+      "username": "smenaria2",
+      "displayName": "Sumit",
+      "bio": null,
+      "avatar": null,
+      "isAnonymous": false,
+      "createdAt": "2025-09-20T10:24:54.454Z",
+      "updatedAt": "2025-09-20T10:24:54.454Z",
+      "hashedPassword": "$2b$12$shE70SvcwmM30ydjXym4w.wL5zF.qVau3FqTZSukffR8DMB10tTbC",
+      "emailVerified": null
+    }
+  ],
+  "memes": [
+    {
+      "id": "cmfs4h7fd0002vuzcz6o17es4",
+      "title": "beach",
+      "description": null,
+      "imageUrl": "/uploads/393aa9ad-e1ae-45de-a703-2286b02ebd55.png",
+      "memeType": "IMAGE",
+      "createdAt": "2025-09-20T10:25:19.321Z",
+      "updatedAt": "2025-09-20T11:13:44.436Z",
+      "upvotes": 0,
+      "downvotes": 0,
+      "views": 20,
+      "shareCount": 0,
+      "authorId": "cmfs4go8m0000vuzc70wdo4sm"
+    },
+    {
+      "id": "cmfs5bsw6000dvuzciaik7yhl",
+      "title": "sky",
+      "description": null,
+      "imageUrl": "/uploads/3c098b2f-cd12-41a5-a944-757192391f02.png",
+      "memeType": "IMAGE",
+      "createdAt": "2025-09-20T10:49:06.820Z",
+      "updatedAt": "2025-09-20T11:19:11.464Z",
+      "upvotes": 1,
+      "downvotes": 0,
+      "views": 2,
+      "shareCount": 1,
+      "authorId": "cmfs4go8m0000vuzc70wdo4sm"
+    },
+    {
+      "id": "cmftcbbvx0001vup427ure611",
+      "title": "love",
+      "description": "nice",
+      "imageUrl": "/uploads/cf0fba67-0da9-43c3-bded-cb533ec1afb6.png",
+      "memeType": "IMAGE",
+      "createdAt": "2025-09-21T06:52:28.260Z",
+      "updatedAt": "2025-09-21T06:52:28.260Z",
+      "upvotes": 0,
+      "downvotes": 0,
+      "views": 0,
+      "shareCount": 0,
+      "authorId": "cmfs4go8m0000vuzc70wdo4sm"
+    }
+  ],
+  "tags": [
+    {
+      "id": "cmfs4h7fl0003vuzcusdulhe1",
+      "name": "meme"
+    },
+    {
+      "id": "cmfs5bswu000evuzc16r430hz",
+      "name": "sky memes"
+    },
+    {
+      "id": "cmftcbbwu0002vup41q5q6oqs",
+      "name": "love"
+    }
+  ],
+  "comments": [
+    {
+      "id": "cmfs56hbg000bvuzc7cxtb1rh",
+      "content": "great view",
+      "createdAt": "2025-09-20T10:44:58.537Z",
+      "updatedAt": "2025-09-20T10:44:58.537Z",
+      "userId": "cmfs4go8m0000vuzc70wdo4sm",
+      "memeId": "cmfs4h7fd0002vuzcz6o17es4"
+    },
+    {
+      "id": "cmfs5ow5f000mvuzcrbv9as03",
+      "content": "nice",
+      "createdAt": "2025-09-20T10:59:17.568Z",
+      "updatedAt": "2025-09-20T10:59:17.568Z",
+      "userId": "cmfs4go8m0000vuzc70wdo4sm",
+      "memeId": "cmfs4h7fd0002vuzcz6o17es4"
+    },
+    {
+      "id": "cmfs628u80010vuzcn9voit75",
+      "content": "best",
+      "createdAt": "2025-09-20T11:09:40.542Z",
+      "updatedAt": "2025-09-20T11:09:40.542Z",
+      "userId": "cmfs4go8m0000vuzc70wdo4sm",
+      "memeId": "cmfs4h7fd0002vuzcz6o17es4"
+    }
+  ],
+  "votes": [
+    {
+      "id": "cmfs5ckcv000ivuzcezij4sdd",
+      "type": "UPVOTE",
+      "userId": "cmfs4go8m0000vuzc70wdo4sm",
+      "memeId": "cmfs5bsw6000dvuzciaik7yhl"
+    }
+  ],
+  "favorites": [],
+  "follows": [],
+  "memeTags": [
+    {
+      "id": "cmfs4h7fz0005vuzcz4z8sj1n",
+      "memeId": "cmfs4h7fd0002vuzcz6o17es4",
+      "tagId": "cmfs4h7fl0003vuzcusdulhe1"
+    },
+    {
+      "id": "cmfs5bsxj000gvuzcqqemekb9",
+      "memeId": "cmfs5bsw6000dvuzciaik7yhl",
+      "tagId": "cmfs5bswu000evuzc16r430hz"
+    },
+    {
+      "id": "cmftcbbx90004vup4looxffq5",
+      "memeId": "cmftcbbvx0001vup427ure611",
+      "tagId": "cmftcbbwu0002vup41q5q6oqs"
+    },
+    {
+      "id": "cmftcbbxr0007vup4yq52eu9m",
+      "memeId": "cmftcbbvx0001vup427ure611",
+      "tagId": "cmfs4h7fl0003vuzcusdulhe1"
+    }
+  ],
+  "notifications": [],
+  "exportedAt": "2025-09-21T09:10:36.401Z"
+}
