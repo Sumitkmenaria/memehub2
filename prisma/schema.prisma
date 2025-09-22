@@ -33,6 +33,7 @@ model User {
   comments       Comment[]
   following      Follow[] @relation("UserFollowing")
   followers      Follow[] @relation("UserFollowers")
+  verificationTokens VerificationToken[]
   
   // Notifications
   sentNotifications     Notification[] @relation("NotificationSender")
@@ -169,6 +170,21 @@ model Notification {
   @@map("notifications")
 }
 
+// Verification token model for email verification
+model VerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  userId    String?
+  type      TokenType @default(EMAIL_VERIFICATION)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("verification_tokens")
+}
+
 // Enums
 enum NotificationType {
   LIKE
@@ -187,4 +203,9 @@ enum MemeType {
 enum VoteType {
   UPVOTE
   DOWNVOTE
+}
+
+enum TokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
 }

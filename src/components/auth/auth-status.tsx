@@ -9,7 +9,7 @@ export function AuthStatus() {
   const { data: session, status, update } = useSession()
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  // Force session refresh on mount and show login toast
+  // Force session refresh on mount - but don't show toast here
   useEffect(() => {
     const refreshSession = async () => {
       setIsRefreshing(true)
@@ -22,15 +22,18 @@ export function AuthStatus() {
       }
     }
     
-    refreshSession()
+    // Only refresh if not already authenticated
+    if (status !== 'authenticated') {
+      refreshSession()
+    }
   }, [])
 
-  // Show success toast when user logs in
-  useEffect(() => {
-    if (status === 'authenticated' && session?.user && !isRefreshing) {
-      showSuccess('Successfully logged in!')
-    }
-  }, [status, session, isRefreshing])
+  // Remove the toast notification - handled in signin page
+  // useEffect(() => {
+  //   if (status === 'authenticated' && session?.user && !isRefreshing) {
+  //     showSuccess('Successfully logged in!')
+  //   }
+  // }, [status, session, isRefreshing])
 
   if (status === 'loading' || isRefreshing) {
     return (

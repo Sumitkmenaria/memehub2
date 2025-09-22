@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Heart, MessageCircle, Share, ChevronUp, ChevronDown, Bookmark, X, User } from 'lucide-react'
+import { Heart, MessageCircle, Share, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Bookmark, X, User } from 'lucide-react'
 import { showSuccess, showError } from '@/components/ui/notification-system'
 
 interface Meme {
@@ -90,12 +90,12 @@ export function ReelViewer({
   const isAuthenticated = status === 'authenticated' && session?.user
   const currentMeme = memes[currentIndex]
 
-  // Handle keyboard navigation
+  // Handle keyboard navigation (up/down and left/right arrows)
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'w' || e.key === 'W') {
         handlePrevious()
-      } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 's' || e.key === 'S') {
         handleNext()
       } else if (e.key === 'Escape') {
         onClose?.()
@@ -121,14 +121,14 @@ export function ReelViewer({
     return () => window.removeEventListener('wheel', handleWheel)
   }, [currentIndex])
 
-  // Touch handlers for swipe navigation
+  // Touch handlers for swipe navigation (horizontal swipe)
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null)
-    setTouchStart(e.targetTouches[0].clientY)
+    setTouchStart(e.targetTouches[0].clientX) // Changed from clientY to clientX
   }
 
   const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientY)
+    setTouchEnd(e.targetTouches[0].clientX) // Changed from clientY to clientX
   }
 
   const onTouchEnd = () => {
@@ -138,8 +138,10 @@ export function ReelViewer({
     const minSwipeDistance = 50
 
     if (distance > minSwipeDistance) {
+      // Swipe left - go to next
       handleNext()
     } else if (distance < -minSwipeDistance) {
+      // Swipe right - go to previous
       handlePrevious()
     }
   }
@@ -380,6 +382,20 @@ export function ReelViewer({
 
         {/* Overlay UI */}
         <div className="absolute inset-0 pointer-events-none">
+          {/* Left swipe indicator */}
+          {currentIndex > 0 && (
+            <div className="absolute left-2 top-1/2 transform -translate-y-1/2 opacity-30 pointer-events-none">
+              <ChevronLeft size={32} className="text-white drop-shadow-lg" />
+            </div>
+          )}
+          
+          {/* Right swipe indicator */}
+          {currentIndex < memes.length - 1 && (
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 opacity-30 pointer-events-none">
+              <ChevronRight size={32} className="text-white drop-shadow-lg" />
+            </div>
+          )}
+
           {/* Top info */}
           <div className="absolute top-4 left-4 right-16 pointer-events-auto">
             <div className="flex items-center space-x-3">
@@ -664,16 +680,24 @@ export function ReelViewer({
         </div>
       )}
 
-      {/* Progress indicator */}
-      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
-        {memes.map((_, index) => (
-          <div
-            key={index}
-            className={`w-1 h-1 rounded-full transition-all ${
-              index === currentIndex ? 'bg-white' : 'bg-white bg-opacity-30'
-            }`}
-          />
-        ))}
+      {/* Progress indicator - horizontal layout */}
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {memes.slice(Math.max(0, currentIndex - 2), currentIndex + 3).map((_, relativeIndex) => {
+          const actualIndex = Math.max(0, currentIndex - 2) + relativeIndex
+          return (
+            <div
+              key={actualIndex}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                actualIndex === currentIndex 
+                  ? 'bg-white scale-125' 
+                  : 'bg-white bg-opacity-40 scale-100'
+              }`}
+            />
+          )
+        })}
+        {currentIndex < memes.length - 3 && (
+          <div className="w-1 h-1 rounded-full bg-white bg-opacity-20" />
+        )}
       </div>
     </div>
   )

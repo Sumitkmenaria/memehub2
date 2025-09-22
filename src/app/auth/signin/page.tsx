@@ -15,6 +15,7 @@ function SignInForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [showResendLink, setShowResendLink] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const { data: session, status } = useSession()
@@ -57,14 +58,22 @@ function SignInForm() {
 
       if (result?.error) {
         setError(result.error)
-      } else if (result?.ok) {
-        // Show success toast and redirect immediately
-        showSuccess('Successfully signed in!')
+        setShowResendLink(false)
         
-        // Force session update and redirect
-        await getSession()
-        router.push('/')
-        router.refresh()
+        // If error is about email verification, show resend link option
+        if (result.error.includes('verify your email')) {
+          setShowResendLink(true)
+        }
+      } else if (result?.ok) {
+        // Show success toast
+        showSuccess('Successfully logged in!')
+        
+        // Wait for session to update, then redirect
+        setTimeout(async () => {
+          await getSession()
+          router.push('/')
+          router.refresh()
+        }, 100)
       } else {
         setError('Sign in failed. Please try again.')
       }
@@ -162,7 +171,17 @@ function SignInForm() {
               <div className="bg-red-50 border border-red-200 rounded-md p-3 animate-shake">
                 <div className="flex items-center">
                   <AlertCircle className="h-4 w-4 text-red-400 mr-2" />
-                  <p className="text-sm text-red-600">{error}</p>
+                  <div className="flex-1">
+                    <p className="text-sm text-red-600">{error}</p>
+                    {showResendLink && (
+                      <Link
+                        href="/auth/resend-verification"
+                        className="text-sm text-indigo-600 hover:text-indigo-800 underline mt-1 inline-block"
+                      >
+                        Resend verification email
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

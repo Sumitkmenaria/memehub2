@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react'
 import { MemeCard } from '@/components/ui/meme-card'
 import { InfiniteScroll } from '@/components/ui/infinite-scroll'
 import { ReelViewer } from '@/components/ui/reel-viewer'
-import { AuthStatus } from '@/components/auth/auth-status'
 import { SearchBar } from '@/components/ui/search-bar'
 import { Plus, Clock, Calendar, CalendarRange } from 'lucide-react'
 import Link from 'next/link'
@@ -201,9 +200,6 @@ export function HomeFeed() {
 
   return (
     <div className="space-y-6">
-      {/* Authentication Status */}
-      <AuthStatus />
-      
       {/* Header */}
       <div className="flex items-center justify-between animate-fade-in">
         <div>
@@ -226,6 +222,32 @@ export function HomeFeed() {
           </Link>
         )}
       </div>
+
+      {/* Anonymous user CTA - moved to top */}
+      {!isAuthenticated && (
+        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 text-center animate-fade-in-delay-1">
+          <h3 className="text-lg font-medium text-indigo-900 mb-2">
+            Join MemeHub to interact with memes!
+          </h3>
+          <p className="text-indigo-700 mb-4">
+            Sign up to upvote, save favorites, and share your own memes.
+          </p>
+          <div className="space-x-3">
+            <Link
+              href="/auth/signup"
+              className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors"
+            >
+              Sign Up
+            </Link>
+            <Link
+              href="/auth/signin"
+              className="inline-flex items-center px-4 py-2 bg-white text-indigo-600 text-sm font-medium rounded-md border border-indigo-300 hover:bg-indigo-50 transition-colors"
+            >
+              Sign In
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Search Bar */}
       <div className="animate-fade-in-delay-2">
@@ -355,32 +377,6 @@ export function HomeFeed() {
             />
           ))}
         </InfiniteScroll>
-      )}
-
-      {/* Anonymous user CTA */}
-      {!isAuthenticated && memes.length > 0 && (
-        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 text-center">
-          <h3 className="text-lg font-medium text-indigo-900 mb-2">
-            Join MemeHub to interact with memes!
-          </h3>
-          <p className="text-indigo-700 mb-4">
-            Sign up to upvote, save favorites, and share your own memes.
-          </p>
-          <div className="space-x-3">
-            <Link
-              href="/auth/signup"
-              className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors"
-            >
-              Sign Up
-            </Link>
-            <Link
-              href="/auth/signin"
-              className="inline-flex items-center px-4 py-2 bg-white text-indigo-600 text-sm font-medium rounded-md border border-indigo-300 hover:bg-indigo-50 transition-colors"
-            >
-              Sign In
-            </Link>
-          </div>
-        </div>
       )}
 
       {/* Reel Viewer Modal */}
